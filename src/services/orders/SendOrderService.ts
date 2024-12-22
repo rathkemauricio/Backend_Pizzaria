@@ -11,7 +11,7 @@ export class SendOrderService{
                 id: order_id
             },
             data: {
-                draft: true
+                draft: false
             }
         });
         return order;
