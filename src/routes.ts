@@ -15,6 +15,14 @@ import { ListCategoryController } from './controllers/category/ListCategoryContr
 import { CreateProductsController } from './controllers/products/CreateProductsController';
 import { ListByCategoryControllers } from './controllers/products/ListByproductControllers';
 
+// -- Controllers Orders -- 
+import { CreateOrderController } from './controllers/orders/CreateOrderController';
+import { RemoveOrderController } from './controllers/orders/RemoveOrderController';
+
+import { AddItemsController } from './controllers/orders/AddItemsController';
+import { RemoveItemController } from './controllers/orders/RemoveItensController';
+import { SendOrderController } from './controllers/orders/SendOrderController';
+
 const router = Router();
 
 //-- MULTER --
@@ -37,5 +45,13 @@ router.get('/category', isAuthenticated, new ListCategoryController().handle)
 //-- ROTAS PRODUCTS --
 router.post('/products', isAuthenticated, upload.single('file'), new CreateProductsController().handle)
 router.get('/category/products', isAuthenticated, new ListByCategoryControllers().handle)
+
+// -- ROTAS ORDER --
+router.post('/order', isAuthenticated, new CreateOrderController().handle)
+router.delete('/order/delete', isAuthenticated, new RemoveOrderController ().handle)
+
+router.post('/order/add', isAuthenticated, new AddItemsController().handle)
+router.delete('/order/remove', isAuthenticated, new RemoveItemController().handle)
+router.put('/order/send', isAuthenticated, new SendOrderController().handle)
 
 export { router }; 
