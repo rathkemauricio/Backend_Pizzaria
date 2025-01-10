@@ -23,6 +23,7 @@ import { AddItemsController } from './controllers/orders/AddItemsController';
 import { RemoveItemController } from './controllers/orders/RemoveItensController';
 import { SendOrderController } from './controllers/orders/SendOrderController';
 import { ListOrderController } from './controllers/orders/ListOrderController';
+import { FinishOrderController } from './controllers/orders/FinishOrderController';
 const router = Router();
 
 //-- MULTER --
@@ -55,4 +56,5 @@ router.delete('/order/remove', isAuthenticated, new RemoveItemController().handl
 router.put('/order/send', isAuthenticated, new SendOrderController().handle)
 router.get('/orders', isAuthenticated, new ListOrderController().handle)
 router.get('/order/detail', isAuthenticated, new DetailOrderController().handle)
+router.put('/order/finish', isAuthenticated, new FinishOrderController().handle)
 export { router }; 
