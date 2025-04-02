@@ -1,29 +1,48 @@
 import { Response, Request } from "express";
 import { CreateProductsServices } from "../../services/products/CreateProductsService";
-import multer from "multer";
+import { UploadedFile } from "express-fileupload";
+import { v2 as cloudinary, UploadApiResponse } from "cloudinary";
+import { error } from "console";
 
-class CreateProductsController{
-    async handle(req:Request, res:Response){
-        const {name, price, description, category_id} = req.body;
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_NAME,
+    api_key: process.env.CLOUDINARY_KEY,
+    api_secret: process.env.CLOUDINARY_SECRET
+})
 
-        const createProductsServices  = new CreateProductsServices();
+class CreateProductsController {
+    async handle(req: Request, res: Response) {
+        const { name, price, description, category_id } = req.body;
 
-        if (!req.file){
-            throw new Error("error upload file")
-        }else{
-            const {originalname, filename: banner} = req.file;
+        const createProductsServices = new CreateProductsServices();
+
+        if (!req.files || Object.keys(req.files).length === 0) {
+            throw new Error("error upload file image")
+        } else {
+            const file: UploadedFile = req.files['file']
+
+            const resultFile: UploadApiResponse = await new Promise((resolve, reject) => {
+                cloudinary.uploader.upload_stream({}, function (error, result) {
+                    if (error) {
+                        reject(error);
+                        return;
+                    }
+                    resolve(result);
+                }).end(file.data);
+            })
+
 
             const product = await createProductsServices.execute({
                 name,
                 price,
                 description,
-                banner,
+                banner: resultFile.url,
                 category_id,
             });
-        
+
             return res.json(product);
         }
-     
+
     }
 }
-export {CreateProductsController}
+export { CreateProductsController }

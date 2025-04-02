@@ -36,7 +36,7 @@ router.post('/users', new CreateUserController().handle)
 
 router.post('/session', new AuthUserController().handle)
 
-router.get('/userinfo',isAuthenticated, new DetailUserController().handle)
+router.get('/me', isAuthenticated, new DetailUserController().handle)
 
 //-- ROTAS CATEGORY --
 
@@ -44,12 +44,13 @@ router.post('/category', isAuthenticated, new CreateCategoryController().handle)
 router.get('/category', isAuthenticated, new ListCategoryController().handle)
 
 //-- ROTAS PRODUCTS --
-router.post('/products', isAuthenticated, upload.single('file'), new CreateProductsController().handle)
+router.post('/products', isAuthenticated, new CreateProductsController().handle)
+//router.post('/products', isAuthenticated, upload.single('file'), new CreateProductsController().handle)
 router.get('/category/products', isAuthenticated, new ListByCategoryControllers().handle)
 
 // -- ROTAS ORDER --
 router.post('/order', isAuthenticated, new CreateOrderController().handle)
-router.delete('/order/delete', isAuthenticated, new RemoveOrderController ().handle)
+router.delete('/order/delete', isAuthenticated, new RemoveOrderController().handle)
 
 router.post('/order/add', isAuthenticated, new AddItemsController().handle)
 router.delete('/order/remove', isAuthenticated, new RemoveItemController().handle)
